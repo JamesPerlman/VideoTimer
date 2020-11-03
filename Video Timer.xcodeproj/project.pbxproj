@@ -13,6 +13,8 @@
 		1A7BE5B1254E8F1800DA86A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7BE5AF254E8F1800DA86A8 /* Main.storyboard */; };
 		1A7BE5B3254E8F1900DA86A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A7BE5B2254E8F1900DA86A8 /* Assets.xcassets */; };
 		1A7BE5B6254E8F1900DA86A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7BE5B4254E8F1900DA86A8 /* LaunchScreen.storyboard */; };
+		1A7BE5BF254FE4E000DA86A8 /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7BE5BE254FE4E000DA86A8 /* VideoRecorder.swift */; };
+		C7F86AE3557D7D5015E344F8 /* Pods_Video_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7AACCFD7AC18A54F86AB9F /* Pods_Video_Timer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,10 @@
 		1A7BE5B2254E8F1900DA86A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A7BE5B5254E8F1900DA86A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A7BE5B7254E8F1900DA86A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A7BE5BE254FE4E000DA86A8 /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
+		243E52189BB3DE49F6B8D6CA /* Pods-Video Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Video Timer.release.xcconfig"; path = "Target Support Files/Pods-Video Timer/Pods-Video Timer.release.xcconfig"; sourceTree = "<group>"; };
+		AA2E2FA1E6BC4286C5112548 /* Pods-Video Timer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Video Timer.debug.xcconfig"; path = "Target Support Files/Pods-Video Timer/Pods-Video Timer.debug.xcconfig"; sourceTree = "<group>"; };
+		CC7AACCFD7AC18A54F86AB9F /* Pods_Video_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Video_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7F86AE3557D7D5015E344F8 /* Pods_Video_Timer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +49,8 @@
 			children = (
 				1A7BE5A8254E8F1800DA86A8 /* Video Timer */,
 				1A7BE5A7254E8F1800DA86A8 /* Products */,
+				8D95C511AFA0DF6422B83C3D /* Pods */,
+				263A1C8CFB72285FD849F590 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -59,12 +68,31 @@
 				1A7BE5A9254E8F1800DA86A8 /* AppDelegate.swift */,
 				1A7BE5AB254E8F1800DA86A8 /* SceneDelegate.swift */,
 				1A7BE5AD254E8F1800DA86A8 /* ViewController.swift */,
+				1A7BE5BE254FE4E000DA86A8 /* VideoRecorder.swift */,
 				1A7BE5AF254E8F1800DA86A8 /* Main.storyboard */,
 				1A7BE5B2254E8F1900DA86A8 /* Assets.xcassets */,
 				1A7BE5B4254E8F1900DA86A8 /* LaunchScreen.storyboard */,
 				1A7BE5B7254E8F1900DA86A8 /* Info.plist */,
 			);
 			path = "Video Timer";
+			sourceTree = "<group>";
+		};
+		263A1C8CFB72285FD849F590 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CC7AACCFD7AC18A54F86AB9F /* Pods_Video_Timer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8D95C511AFA0DF6422B83C3D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AA2E2FA1E6BC4286C5112548 /* Pods-Video Timer.debug.xcconfig */,
+				243E52189BB3DE49F6B8D6CA /* Pods-Video Timer.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +102,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1A7BE5BA254E8F1900DA86A8 /* Build configuration list for PBXNativeTarget "Video Timer" */;
 			buildPhases = (
+				8A55457E74380A080C378EC1 /* [CP] Check Pods Manifest.lock */,
 				1A7BE5A2254E8F1800DA86A8 /* Sources */,
 				1A7BE5A3254E8F1800DA86A8 /* Frameworks */,
 				1A7BE5A4254E8F1800DA86A8 /* Resources */,
+				0E59341037E1A3FFC88EADDF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +162,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0E59341037E1A3FFC88EADDF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Video Timer/Pods-Video Timer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Video Timer/Pods-Video Timer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Video Timer/Pods-Video Timer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8A55457E74380A080C378EC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Video Timer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1A7BE5A2254E8F1800DA86A8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,6 +212,7 @@
 				1A7BE5AE254E8F1800DA86A8 /* ViewController.swift in Sources */,
 				1A7BE5AA254E8F1800DA86A8 /* AppDelegate.swift in Sources */,
 				1A7BE5AC254E8F1800DA86A8 /* SceneDelegate.swift in Sources */,
+				1A7BE5BF254FE4E000DA86A8 /* VideoRecorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,7 +289,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -271,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -283,6 +356,7 @@
 		};
 		1A7BE5BB254E8F1900DA86A8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA2E2FA1E6BC4286C5112548 /* Pods-Video Timer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -302,6 +376,7 @@
 		};
 		1A7BE5BC254E8F1900DA86A8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 243E52189BB3DE49F6B8D6CA /* Pods-Video Timer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
