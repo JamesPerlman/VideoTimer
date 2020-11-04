@@ -101,15 +101,6 @@ class VideoRecorder: NSObject {
         if movieFileOutput.isRecording {
             movieFileOutput.stopRecording()
         }
-        
-        guard let videoDevice = self.videoDevice else {
-            return
-        }
-        
-        try! videoDevice.lockForConfiguration()
-        videoDevice.focusMode = .continuousAutoFocus
-        videoDevice.exposureMode = .continuousAutoExposure
-        videoDevice.unlockForConfiguration()
     }
     
     func cleanupRecording(fileURL: URL) {
@@ -167,10 +158,6 @@ class VideoRecorder: NSObject {
                 return
             }
             
-            try! videoDevice.lockForConfiguration()
-            videoDevice.focusMode = .continuousAutoFocus
-            videoDevice.exposureMode = .continuousAutoExposure
-            videoDevice.unlockForConfiguration()
             
             let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
             
@@ -199,6 +186,26 @@ class VideoRecorder: NSObject {
         }
         session.commitConfiguration()
         print("Completed setup")
+    }
+    
+    func lockCamera() {
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        try! videoDevice.lockForConfiguration()
+        videoDevice.focusMode = .continuousAutoFocus
+        videoDevice.exposureMode = .continuousAutoExposure
+        videoDevice.unlockForConfiguration()
+    }
+    
+    func unlockCamera() {
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        try! videoDevice.lockForConfiguration()
+        videoDevice.focusMode = .continuousAutoFocus
+        videoDevice.exposureMode = .continuousAutoExposure
+        videoDevice.unlockForConfiguration()
     }
     
     /// - Tag: HandleRuntimeError

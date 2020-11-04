@@ -12,7 +12,12 @@ class ViewController: UIViewController {
     let videoRecorder = VideoRecorder()
     var timer: Timer? = nil
     var videoPrefix: String = ""
-    var videoNumber: Int = 0
+    var videoNumber: Int = 0 {
+        didSet {
+            self.videoNumberLabel.text = "\(videoNumber)"
+        }
+    }
+
     lazy var dateFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd_hh-mm-ss"
@@ -25,10 +30,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var videoNumberLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        videoNumberLabel.layer.shadowColor = UIColor.black.cgColor
+        videoNumberLabel.layer.shadowRadius = 2.0
+        videoNumberLabel.layer.shadowOpacity = 1.0
+        videoNumberLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
+        videoNumberLabel.layer.masksToBounds = false
         
         videoRecorder.requestPermissions {
             self.videoRecorder.setup()
@@ -51,28 +64,67 @@ class ViewController: UIViewController {
     
     @IBAction func startRecording(_ sender: Any?) {
         invalidateTimer()
-        guard let duration = Int(durationField.text ?? ""), let interval = Int(durationField.text ?? "") else {
+        guard let duration = TimeInterval(durationField.text ?? ""), let interval = TimeInterval(intervalField.text ?? "") else {
             return
         }
-        self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true, block: { (timer) in
-            self.videoRecorder.startRecording(fileName: self.dateFormatter.string(from: Date()))
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(duration)) {
-                self.videoRecorder.stopRecording()
+        
+        videoRecorder.lockCamera()
+        
+        self.videoNumber = 0
+        self.videoNumberLabel.isHidden = false
+        
+        self.progressView.tintColor = .systemRed
+        self.progressView.progress = 0
+        self.progressView.layoutIfNeeded()
+        
+        func recordVideo() {
+            self.videoRecorder.startRecording(fileName: "\(videoNumber)_\(dateFormatter.string(from: Date()))")
+            self.videoNumber += 1
+            DispatchQueue.main.async {
+                
+                self.progressView.tintColor = .systemRed
+                self.progressView.progress = 0
+                self.progressView.layoutIfNeeded()
+                
+                UIView.animate(withDuration: duration) {
+                    self.progressView.progress = 1
+                    self.progressView.layoutIfNeeded()
+                }
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                
+                self.videoRecorder.stopRecording()
+                self.progressView.tintColor = .systemGray
+                self.progressView.progress = 0
+                self.progressView.layoutIfNeeded()
+                
+                UIView.animate(withDuration: duration) {
+                    self.progressView.progress = 1
+                    self.progressView.layoutIfNeeded()
+                }
+            }
+        }
+        
+        recordVideo()
+        self.timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { (timer) in
+            recordVideo()
         })
         
         startButton.isHidden = true
         stopButton.isHidden = false
         self.settingsButton.isHidden = true
+        self.progressView.isHidden = false
         
     }
     
     @IBAction func stopRecording(_ sender: Any?) {
         invalidateTimer()
+        videoRecorder.unlockCamera()
+        self.videoNumberLabel.isHidden = true
         startButton.isHidden = false
         stopButton.isHidden = true
         settingsButton.isHidden = false
+        self.progressView.isHidden = true
     }
     
     @IBAction func showSettings(_ sender: Any?) {
