@@ -15,13 +15,37 @@ class VideoRecorder: NSObject {
     private let sessionQueue = DispatchQueue(label: "session queue")
     private var backgroundRecordingID: UIBackgroundTaskIdentifier?
     private var fileName: String?
+    private var videoDevice: AVCaptureDevice?
+    @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
     
-    func requestPermissions() {
+    let session = AVCaptureSession()
+    let previewView = VideoPreviewView()
+    
+    override init() {
+        super.init()
+        previewView.session = session
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(sessionWasInterrupted),
+                                               name: .AVCaptureSessionWasInterrupted,
+                                               object: session)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(sessionInterruptionEnded),
+                                               name: .AVCaptureSessionInterruptionEnded,
+                                               object: session)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func requestPermissions(completion: @escaping () -> Void) {
         PHPhotoLibrary.requestAuthorization() { (status) in
             print("Photos auth status: \(status)")
-        }
-        AVCaptureDevice.requestAccess(for: .video) { (granted) in
-            print("AV Capture granted: \(granted)")
+            AVCaptureDevice.requestAccess(for: .video) { (granted) in
+                print("AV Capture granted: \(granted)")
+                completion()
+            }
         }
     }
     
@@ -33,6 +57,16 @@ class VideoRecorder: NSObject {
         if movieFileOutput.isRecording {
             return
         }
+        
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        print("Starting recording: \(fileName)")
+        
+        try! videoDevice.lockForConfiguration()
+        videoDevice.focusMode = .locked
+        videoDevice.exposureMode = .locked
+        videoDevice.unlockForConfiguration()
         
         sessionQueue.async {
             if !movieFileOutput.isRecording {
@@ -67,6 +101,15 @@ class VideoRecorder: NSObject {
         if movieFileOutput.isRecording {
             movieFileOutput.stopRecording()
         }
+        
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        
+        try! videoDevice.lockForConfiguration()
+        videoDevice.focusMode = .continuousAutoFocus
+        videoDevice.exposureMode = .continuousAutoExposure
+        videoDevice.unlockForConfiguration()
     }
     
     func cleanupRecording(fileURL: URL) {
@@ -85,6 +128,105 @@ class VideoRecorder: NSObject {
             
             if currentBackgroundRecordingID != .invalid {
                 UIApplication.shared.endBackgroundTask(currentBackgroundRecordingID)
+            }
+        }
+    }
+    
+    func setup() {
+        sessionQueue.async {
+            self.configureSession()
+            self.session.startRunning()
+            DispatchQueue.main.async {
+                self.previewView.session = self.session
+            }
+        }
+    }
+    
+    private func configureSession() {
+        
+        session.beginConfiguration()
+        
+        /*
+         Do not create an AVCaptureMovieFileOutput when setting up the session because
+         Live Photo is not supported when AVCaptureMovieFileOutput is added to the session.
+         */
+        session.sessionPreset = .hd4K3840x2160
+        
+        // Add video input.
+        do {
+            // Choose the back dual camera, if available, otherwise default to a wide angle camera.
+            if let dualCameraDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
+                self.videoDevice = dualCameraDevice
+            } else if let backCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
+                // If a rear dual camera is not available, default to the rear wide angle camera.
+                self.videoDevice = backCameraDevice
+            }
+            guard let videoDevice = self.videoDevice else {
+                print("Default video device is unavailable.")
+                session.commitConfiguration()
+                return
+            }
+            
+            try! videoDevice.lockForConfiguration()
+            videoDevice.focusMode = .continuousAutoFocus
+            videoDevice.exposureMode = .continuousAutoExposure
+            videoDevice.unlockForConfiguration()
+            
+            let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+            
+            if session.canAddInput(videoDeviceInput) {
+                session.addInput(videoDeviceInput)
+                self.videoDeviceInput = videoDeviceInput
+                print("Added device \(videoDeviceInput) to session.")
+            } else {
+                print("Couldn't add video device input to the session.")
+                session.commitConfiguration()
+                return
+            }
+            
+            let movieFileOutput = AVCaptureMovieFileOutput()
+            
+            if session.canAddOutput(movieFileOutput) {
+                session.addOutput(movieFileOutput)
+            }
+            
+            self.movieFileOutput = movieFileOutput
+            
+        } catch {
+            print("Couldn't create video device input: \(error)")
+            session.commitConfiguration()
+            return
+        }
+        session.commitConfiguration()
+        print("Completed setup")
+    }
+    
+    /// - Tag: HandleRuntimeError
+    @objc func sessionRuntimeError(notification: NSNotification) {
+        guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError else { return }
+        
+        print("Capture session runtime error: \(error)")
+        // If media services were reset, and the last start succeeded, restart the session.
+        if error.code == .mediaServicesWereReset {
+            sessionQueue.async {
+                if self.session.isRunning {
+                    self.session.startRunning()
+                }
+            }
+        }
+    }
+    
+    @objc func sessionWasInterrupted(notification: NSNotification) {
+        if !session.isRunning {
+            sessionQueue.async {
+                self.session.startRunning()
+            }
+        }
+    }
+    @objc func sessionInterruptionEnded(notification: NSNotification) {
+        if !session.isRunning {
+            sessionQueue.async {
+                self.session.startRunning()
             }
         }
     }
