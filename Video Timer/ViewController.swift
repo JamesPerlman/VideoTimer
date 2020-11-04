@@ -32,7 +32,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var videoNumberLabel: UILabel!
-    
+    @IBOutlet weak var toggleFocusButton: UIButton!
+    @IBOutlet weak var toggleExposureButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -67,8 +68,6 @@ class ViewController: UIViewController {
         guard let duration = TimeInterval(durationField.text ?? ""), let interval = TimeInterval(intervalField.text ?? "") else {
             return
         }
-        
-        videoRecorder.lockCamera()
         
         self.videoNumber = 0
         self.videoNumberLabel.isHidden = false
@@ -119,7 +118,6 @@ class ViewController: UIViewController {
     
     @IBAction func stopRecording(_ sender: Any?) {
         invalidateTimer()
-        videoRecorder.unlockCamera()
         self.videoNumberLabel.isHidden = true
         startButton.isHidden = false
         stopButton.isHidden = true
@@ -134,6 +132,26 @@ class ViewController: UIViewController {
     @IBAction func hideSettings(_ sender: Any?) {
         self.settingsView.isHidden = true
         view.endEditing(true)
+    }
+    
+    @IBAction func toggleFocusLock(_ sender: Any?) {
+        if videoRecorder.isFocusLocked {
+            videoRecorder.unlockFocus()
+            toggleFocusButton.setTitle("Lock Focus", for: .normal)
+        } else {
+            videoRecorder.lockFocus()
+            toggleFocusButton.setTitle("Unlock Focus", for: .normal)
+        }
+    }
+    
+    @IBAction func toggleExposureLock(_ sender: Any?) {
+        if videoRecorder.isExposureLocked {
+            videoRecorder.unlockExposure()
+            toggleExposureButton.setTitle("Lock Exposure", for: .normal)
+        } else {
+            videoRecorder.lockExposure()
+            toggleExposureButton.setTitle("Unlock Exposure", for: .normal)
+        }
     }
     
     func invalidateTimer() {

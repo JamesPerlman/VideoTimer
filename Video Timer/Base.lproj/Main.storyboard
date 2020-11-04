@@ -16,6 +16,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LWR-eG-BVz">
+                                <rect key="frame" x="16" y="80" width="120" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="iIk-is-QH8"/>
+                                </constraints>
+                                <state key="normal" title="Lock Exposure"/>
+                                <connections>
+                                    <action selector="toggleExposureLock:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oxJ-Q9-9zy"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cnQ-f3-HrN">
+                                <rect key="frame" x="16" y="126" width="120" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="lZS-Zh-bTY"/>
+                                </constraints>
+                                <state key="normal" title="Lock Focus"/>
+                                <connections>
+                                    <action selector="toggleFocusLock:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ycW-NF-8Ub"/>
+                                </connections>
+                            </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ase-Q9-S0D">
                                 <rect key="frame" x="186" y="80" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -144,10 +166,13 @@
                         <constraints>
                             <constraint firstItem="epF-Xm-E7h" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="2bz-yN-Syn"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ceJ-7e-fYR" secondAttribute="trailing" constant="16" id="3CK-6C-s57"/>
+                            <constraint firstItem="LWR-eG-BVz" firstAttribute="top" secondItem="Cix-bI-nF0" secondAttribute="bottom" constant="16" id="5Xq-Yv-yL7"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kks-Ar-fjk" secondAttribute="trailing" constant="16" id="5iy-BW-tFg"/>
                             <constraint firstItem="S5T-Ps-6Be" firstAttribute="width" secondItem="Kks-Ar-fjk" secondAttribute="width" id="6X3-75-ZZI"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Cix-bI-nF0" secondAttribute="trailing" constant="16" id="DPY-PT-naH"/>
                             <constraint firstItem="S5T-Ps-6Be" firstAttribute="height" secondItem="Kks-Ar-fjk" secondAttribute="height" id="Lof-Ti-ixo"/>
+                            <constraint firstItem="cnQ-f3-HrN" firstAttribute="top" secondItem="LWR-eG-BVz" secondAttribute="bottom" constant="16" id="Mzu-dU-jra"/>
+                            <constraint firstItem="cnQ-f3-HrN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="NTd-lf-Gi5"/>
                             <constraint firstItem="Ase-Q9-S0D" firstAttribute="top" secondItem="Cix-bI-nF0" secondAttribute="bottom" constant="16" id="Nfh-pE-lA8"/>
                             <constraint firstItem="epF-Xm-E7h" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Tcv-Tn-PHD"/>
                             <constraint firstItem="S5T-Ps-6Be" firstAttribute="centerY" secondItem="Kks-Ar-fjk" secondAttribute="centerY" id="Wky-vh-xD8"/>
@@ -156,6 +181,7 @@
                             <constraint firstItem="Ase-Q9-S0D" firstAttribute="centerX" secondItem="Cix-bI-nF0" secondAttribute="centerX" id="a97-Wl-JfT"/>
                             <constraint firstItem="Kks-Ar-fjk" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="8" id="be5-7t-s7A"/>
                             <constraint firstItem="S5T-Ps-6Be" firstAttribute="centerX" secondItem="Kks-Ar-fjk" secondAttribute="centerX" id="eXI-Id-VH7"/>
+                            <constraint firstItem="LWR-eG-BVz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="n4C-r9-HUu"/>
                             <constraint firstItem="Cix-bI-nF0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="nO5-KE-Ilk"/>
                             <constraint firstItem="Cix-bI-nF0" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="qPZ-mE-RZ4"/>
                             <constraint firstItem="epF-Xm-E7h" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qb3-3D-Ygz"/>
@@ -171,6 +197,8 @@
                         <outlet property="settingsView" destination="epF-Xm-E7h" id="hLf-Va-ypa"/>
                         <outlet property="startButton" destination="Kks-Ar-fjk" id="qNc-AV-3rL"/>
                         <outlet property="stopButton" destination="S5T-Ps-6Be" id="fif-ID-ijq"/>
+                        <outlet property="toggleExposureButton" destination="LWR-eG-BVz" id="Rvl-vV-zVo"/>
+                        <outlet property="toggleFocusButton" destination="cnQ-f3-HrN" id="Lw5-4P-Mjo"/>
                         <outlet property="videoNumberLabel" destination="Ase-Q9-S0D" id="cFx-7I-TKw"/>
                     </connections>
                 </viewController>

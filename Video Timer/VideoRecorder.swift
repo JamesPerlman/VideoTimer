@@ -18,6 +18,18 @@ class VideoRecorder: NSObject {
     private var videoDevice: AVCaptureDevice?
     @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
     
+    var isFocusLocked: Bool {
+        get {
+            return videoDevice?.focusMode == .locked
+        }
+    }
+    
+    var isExposureLocked: Bool {
+        get {
+            return videoDevice?.exposureMode == .locked
+        }
+    }
+    
     let session = AVCaptureSession()
     let previewView = VideoPreviewView()
     
@@ -188,13 +200,49 @@ class VideoRecorder: NSObject {
         print("Completed setup")
     }
     
-    func lockCamera() {
+    func lockExposure() {
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        try! videoDevice.lockForConfiguration()
+        videoDevice.exposureMode = .locked
+        videoDevice.unlockForConfiguration()
+    }
+    
+    func unlockExposure() {
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        try! videoDevice.lockForConfiguration()
+        videoDevice.exposureMode = .continuousAutoExposure
+        videoDevice.unlockForConfiguration()
+    }
+    
+    func lockFocus() {
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        try! videoDevice.lockForConfiguration()
+        videoDevice.focusMode = .locked
+        videoDevice.unlockForConfiguration()
+    }
+    
+    func unlockFocus() {
         guard let videoDevice = self.videoDevice else {
             return
         }
         try! videoDevice.lockForConfiguration()
         videoDevice.focusMode = .continuousAutoFocus
-        videoDevice.exposureMode = .continuousAutoExposure
+        videoDevice.unlockForConfiguration()
+    }
+    
+    func lockCamera() {
+        guard let videoDevice = self.videoDevice else {
+            return
+        }
+        try! videoDevice.lockForConfiguration()
+        videoDevice.focusMode = .locked
+        videoDevice.exposureMode = .locked
         videoDevice.unlockForConfiguration()
     }
     
