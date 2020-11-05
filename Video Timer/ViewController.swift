@@ -12,12 +12,8 @@ class ViewController: UIViewController {
     let videoRecorder = VideoRecorder()
     var timer: Timer? = nil
     var videoPrefix: String = ""
-    var videoNumber: Int = 0 {
-        didSet {
-            self.videoNumberLabel.text = "\(videoNumber)"
-        }
-    }
-
+    var videoNumber: Int = 0
+    
     lazy var dateFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd_hh-mm-ss"
@@ -30,7 +26,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var settingsButton: UIButton!
-    @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var videoNumberLabel: UILabel!
     @IBOutlet weak var toggleFocusButton: UIButton!
     @IBOutlet weak var toggleExposureButton: UIButton!
@@ -72,36 +67,19 @@ class ViewController: UIViewController {
         self.videoNumber = 0
         self.videoNumberLabel.isHidden = false
         
-        self.progressView.tintColor = .systemRed
-        self.progressView.progress = 0
-        self.progressView.layoutIfNeeded()
-        
         func recordVideo() {
+            DispatchQueue.main.async {
+                self.videoNumberLabel.text = "Recording (\(self.videoNumber))"
+            }
             self.videoRecorder.startRecording(fileName: "\(videoNumber)_\(dateFormatter.string(from: Date()))")
             self.videoNumber += 1
-            DispatchQueue.main.async {
-                
-                self.progressView.tintColor = .systemRed
-                self.progressView.progress = 0
-                self.progressView.layoutIfNeeded()
-                
-                UIView.animate(withDuration: duration) {
-                    self.progressView.progress = 1
-                    self.progressView.layoutIfNeeded()
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                
+            
+            Timer.scheduledTimer(withTimeInterval: duration, repeats: false, block: { (timer) in
                 self.videoRecorder.stopRecording()
-                self.progressView.tintColor = .systemGray
-                self.progressView.progress = 0
-                self.progressView.layoutIfNeeded()
-                
-                UIView.animate(withDuration: duration) {
-                    self.progressView.progress = 1
-                    self.progressView.layoutIfNeeded()
+                DispatchQueue.main.async {
+                    self.videoNumberLabel.text = "Waiting (\(self.videoNumber))"
                 }
-            }
+            })
         }
         
         recordVideo()
@@ -112,8 +90,6 @@ class ViewController: UIViewController {
         startButton.isHidden = true
         stopButton.isHidden = false
         self.settingsButton.isHidden = true
-        self.progressView.isHidden = false
-        
     }
     
     @IBAction func stopRecording(_ sender: Any?) {
@@ -122,7 +98,7 @@ class ViewController: UIViewController {
         startButton.isHidden = false
         stopButton.isHidden = true
         settingsButton.isHidden = false
-        self.progressView.isHidden = true
+        self.videoNumberLabel.text = ""
     }
     
     @IBAction func showSettings(_ sender: Any?) {
