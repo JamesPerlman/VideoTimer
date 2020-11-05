@@ -75,11 +75,6 @@ class VideoRecorder: NSObject {
         }
         print("Starting recording: \(fileName)")
         
-        try! videoDevice.lockForConfiguration()
-        videoDevice.focusMode = .locked
-        videoDevice.exposureMode = .locked
-        videoDevice.unlockForConfiguration()
-        
         sessionQueue.async {
             if !movieFileOutput.isRecording {
                 if UIDevice.current.isMultitaskingSupported {
