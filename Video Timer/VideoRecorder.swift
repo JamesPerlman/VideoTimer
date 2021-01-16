@@ -70,9 +70,10 @@ class VideoRecorder: NSObject {
             return
         }
         
-        guard let videoDevice = self.videoDevice else {
+        if self.videoDevice == nil {
             return
         }
+        
         print("Starting recording: \(fileName)")
         
         sessionQueue.async {

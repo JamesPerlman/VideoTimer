@@ -22,6 +22,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Use the camera to take video.</string>
+	<key>NSHomeKitUsageDescription</key>
+	<string>Use the humidifier to water the mushrooms!</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow app to save video.</string>
 	<key>UIApplicationSceneManifest</key>
@@ -56,6 +58,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

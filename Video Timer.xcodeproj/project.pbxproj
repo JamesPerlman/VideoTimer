@@ -14,6 +14,8 @@
 		1A7BE5B3254E8F1900DA86A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A7BE5B2254E8F1900DA86A8 /* Assets.xcassets */; };
 		1A7BE5B6254E8F1900DA86A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7BE5B4254E8F1900DA86A8 /* LaunchScreen.storyboard */; };
 		1A7BE5BF254FE4E000DA86A8 /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7BE5BE254FE4E000DA86A8 /* VideoRecorder.swift */; };
+		1A8215CF25A6C07F0088DE11 /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A8215CE25A6C07F0088DE11 /* HomeKit.framework */; };
+		1A82165125AD34630088DE11 /* HMAccessory+find.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A82165025AD34630088DE11 /* HMAccessory+find.swift */; };
 		1AA231452551346100B71200 /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA231442551346100B71200 /* VideoPreviewView.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,9 @@
 		1A7BE5B5254E8F1900DA86A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A7BE5B7254E8F1900DA86A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A7BE5BE254FE4E000DA86A8 /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
+		1A8215CC25A6C07F0088DE11 /* Video Timer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Video Timer.entitlements"; sourceTree = "<group>"; };
+		1A8215CE25A6C07F0088DE11 /* HomeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HomeKit.framework; path = System/Library/Frameworks/HomeKit.framework; sourceTree = SDKROOT; };
+		1A82165025AD34630088DE11 /* HMAccessory+find.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HMAccessory+find.swift"; sourceTree = "<group>"; };
 		1AA231442551346100B71200 /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A8215CF25A6C07F0088DE11 /* HomeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +52,7 @@
 			children = (
 				1A7BE5A8254E8F1800DA86A8 /* Video Timer */,
 				1A7BE5A7254E8F1800DA86A8 /* Products */,
+				1A8215CD25A6C07F0088DE11 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +67,7 @@
 		1A7BE5A8254E8F1800DA86A8 /* Video Timer */ = {
 			isa = PBXGroup;
 			children = (
+				1A8215CC25A6C07F0088DE11 /* Video Timer.entitlements */,
 				1A7BE5A9254E8F1800DA86A8 /* AppDelegate.swift */,
 				1A7BE5AB254E8F1800DA86A8 /* SceneDelegate.swift */,
 				1A7BE5AD254E8F1800DA86A8 /* ViewController.swift */,
@@ -69,8 +77,17 @@
 				1A7BE5B2254E8F1900DA86A8 /* Assets.xcassets */,
 				1A7BE5B4254E8F1900DA86A8 /* LaunchScreen.storyboard */,
 				1A7BE5B7254E8F1900DA86A8 /* Info.plist */,
+				1A82165025AD34630088DE11 /* HMAccessory+find.swift */,
 			);
 			path = "Video Timer";
+			sourceTree = "<group>";
+		};
+		1A8215CD25A6C07F0088DE11 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1A8215CE25A6C07F0088DE11 /* HomeKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +164,7 @@
 				1A7BE5AA254E8F1800DA86A8 /* AppDelegate.swift in Sources */,
 				1AA231452551346100B71200 /* VideoPreviewView.swift in Sources */,
 				1A7BE5AC254E8F1800DA86A8 /* SceneDelegate.swift in Sources */,
+				1A82165125AD34630088DE11 /* HMAccessory+find.swift in Sources */,
 				1A7BE5BF254FE4E000DA86A8 /* VideoRecorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,6 +312,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Video Timer/Video Timer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6NK34BJQZ4;
 				INFOPLIST_FILE = "Video Timer/Info.plist";
@@ -313,6 +332,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Video Timer/Video Timer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6NK34BJQZ4;
 				INFOPLIST_FILE = "Video Timer/Info.plist";

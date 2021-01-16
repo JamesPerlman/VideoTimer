@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import HomeKit
 
 class ViewController: UIViewController {
     
@@ -29,9 +30,42 @@ class ViewController: UIViewController {
     @IBOutlet weak var videoNumberLabel: UILabel!
     @IBOutlet weak var toggleFocusButton: UIButton!
     @IBOutlet weak var toggleExposureButton: UIButton!
+    
+    let homeManager = HMHomeManager()
+    var home: HMHome? {
+        didSet {
+            guard let home = home else {
+                return
+            }
+            
+            humidifier = home.accessories.first(where: { $0.name == "Humidifier" })
+        }
+    }
+    let accessoryBrowser = HMAccessoryBrowser()
+    var humidifier: HMAccessory?
+    
+    func setupHomeKit() {
+        homeManager.delegate = self
+        accessoryBrowser.delegate = self
+    }
+    
+    func setHumidifierOn(_ toggleState: Bool) {
+        
+        guard let characteristic = humidifier?.find(serviceType: HMServiceTypeOutlet, characteristicType: HMCharacteristicMetadataFormatBool) else {
+            return
+        }
+        
+        characteristic.writeValue(NSNumber(value: toggleState)) { error in
+            if error != nil {
+                print("Something went wrong when trying access the humidifier")
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        setupHomeKit()
         
         videoNumberLabel.layer.shadowColor = UIColor.black.cgColor
         videoNumberLabel.layer.shadowRadius = 2.0
@@ -59,7 +93,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func startRecording(_ sender: Any?) {
-        invalidateTimer()
+        invalidateTimers()
         guard let duration = TimeInterval(durationField.text ?? ""), let interval = TimeInterval(intervalField.text ?? "") else {
             return
         }
@@ -71,6 +105,7 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.videoNumberLabel.text = "Recording (\(self.videoNumber))"
             }
+            self.setHumidifierOn(false)
             self.videoRecorder.startRecording(fileName: "\(videoNumber)_\(dateFormatter.string(from: Date()))")
             self.videoNumber += 1
             
@@ -79,13 +114,17 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.videoNumberLabel.text = "Waiting (\(self.videoNumber))"
                 }
+                self.setHumidifierOn(true)
             })
         }
+        
+        // turn off humidifier 10s before filming starts
         
         recordVideo()
         self.timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { (timer) in
             recordVideo()
         })
+        
         
         startButton.isHidden = true
         stopButton.isHidden = false
@@ -93,7 +132,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func stopRecording(_ sender: Any?) {
-        invalidateTimer()
+        invalidateTimers()
         self.videoNumberLabel.isHidden = true
         startButton.isHidden = false
         stopButton.isHidden = true
@@ -130,10 +169,19 @@ class ViewController: UIViewController {
         }
     }
     
-    func invalidateTimer() {
-        if let timer = self.timer {
-            timer.invalidate()
-        }
+    func invalidateTimers() {
+        self.timer?.invalidate()
     }
 }
 
+extension ViewController: HMHomeManagerDelegate {
+    func homeManagerDidUpdateHomes(_ manager: HMHomeManager) {
+        home = manager.primaryHome
+    }
+}
+
+extension ViewController: HMAccessoryBrowserDelegate {
+    func accessoryBrowser(_ browser: HMAccessoryBrowser, didFindNewAccessory accessory: HMAccessory) {
+        print("\(accessory)")
+    }
+}
